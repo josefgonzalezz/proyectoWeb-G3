@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:fragment="head">
+        <title>Árboles</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="src/main/resources/static/css/css.css"/>    
+        <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    </head>
+
+    <body th:fragment="body" class="d-flex flex-column" style="min-height: 100vh;">
+
+        <header th:fragment="header">
+            <nav class="navbar navbar-dark bg-success">
+                <div class="container-fluid d-flex align-items-center">
+                    <a class="navbar-brand d-flex align-items-center ms-3" th:href="@{/}">
+                        <img th:src="@{/image/vaca.jpg}" alt="Vaca" width="40" height="40" class="me-2" />
+                    </a>
+
+                    <button class="navbar-toggler" type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#navbarMenu" 
+                            aria-controls="navbarMenu" 
+                            aria-expanded="false" 
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <form class="d-flex mx-auto" th:action="@{/buscar}" method="GET" role="search" style="max-width: 600px; width: 100%;">
+                        <input class="form-control me-2 flex-grow-1" 
+                               type="search" 
+                               placeholder="Buscar..." 
+                               aria-label="Buscar" 
+                               name="q" />
+                        <button class="btn btn-outline-light" type="submit">Buscar</button>
+                    </form>
+                    <div class="d-flex align-items-center ms-auto">
+                        <a th:href="@{/carrito}" class="text-white me-3">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                        </a>
+                        <a th:href="@{/login}" class="text-white">
+                            <i class="fas fa-user fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="collapse bg-dark" id="navbarMenu">
+                    <div class="p-3">
+                        <ul class="navbar-nav">
+                            <li class="nav-item px-2">
+                                <a class="nav-menu-link nav-link" th:href="@{/categoria/hombres}">Hombres</a>
+                            </li>
+                            <li class="nav-item px-2">
+                                <a class="nav-menu-link nav-link" th:href="@{/categoria/mujeres}">Mujeres</a>
+                            </li>
+                            <li class="nav-item px-2">
+                                <a class="nav-menu-link nav-link" th:href="@{/novedades}">Novedades</a>
+                            </li>
+                            <li class="nav-item px-2">
+                               <a class="nav-menu-link nav-link" th:href="@{/nosotros/listado}">Sobre Nosotros</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main th:fragment="main" class="flex-grow-1 w-100 text-center" style="background-color: white; padding: 0; margin: 0;">
+            <div id="carouselExampleIndicators" class="carousel slide mb-0" data-bs-ride="false" style="width: 100%;">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Video 1"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Video 2"></button>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Video 3"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
+                            <source th:src="@{/video/video1.mp4}" type="video/mp4"/>
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
+                            <source th:src="@{/video/video2.mp4}" type="video/mp4"/>
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
+                            <source th:src="@{/video/video3.mp4}" type="video/mp4"/>
+                        </video>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                    <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
+                        <img class="card-img-top" src="/image/vaca.jpg" alt="Hombres"
+                             style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/listado/hombres" class="stretched-link text-decoration-none text-dark">Hombres</a>
+                            </h5>
+                            <p class="card-text">Explora nuestra colección para hombres con las últimas tendencias.</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Actualizado hace 3 minutos</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                    <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
+                        <img class="card-img-top" src="/image/vaca.jpg" alt="Novedades"
+                             style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/listado/novedades" class="stretched-link text-decoration-none text-dark">Novedades</a>
+                            </h5>
+                            <p class="card-text">Descubre las últimas novedades que tenemos para ti.</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Actualizado hace 3 minutos</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 d-flex justify-content-center">
+                    <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
+                        <img class="card-img-top" src="/image/vaca.jpg" alt="Mujeres"
+                             style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="/listado/mujeres" class="stretched-link text-decoration-none text-dark">Mujeres</a>
+                            </h5>
+                            <p class="card-text">Encuentra lo mejor para mujeres con estilos exclusivos.</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Actualizado hace 3 minutos</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <footer>
+            <div class="navbar navbar-dark bg-success text-white p-3">
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-envelope-fill" style="font-size: 1.5rem; margin-right: 10px;"></i>
+                        <div>
+                            <p class="mb-0 fst-italic">¿Necesitas ayuda?</p>
+                            <p class="mb-0">Enviar e-mail</p>
+                        </div>
+                    </div>
+                    <div>
+                        <i class="bi bi-snapchat" style="font-size: 1.5rem; margin-left: 15px;"></i>
+                        <i class="bi bi-facebook" style="font-size: 1.5rem; margin-left: 15px;"></i>
+                        <i class="bi bi-whatsapp" style="font-size: 1.5rem; margin-left: 15px;"></i>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+</html>
