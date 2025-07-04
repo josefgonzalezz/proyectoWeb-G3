@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
@@ -12,7 +11,6 @@
 <body>
   
 
-    <!-- Fragmento: Tabs de Categorías -->
     <section th:fragment="categoriasTabs" id="categorias">
     <div class="row py-4 justify-content-center">
         <div class="col-auto">
@@ -29,10 +27,7 @@
         </div>
     </div>
 </section>
-
-
-    
-    <!-- Fragmento: Botón Agregar Producto -->
+ 
     <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
         <div class="container">
             <div class="row">
@@ -45,7 +40,7 @@
         </div>
     </section>
 
-    <!-- Fragmento: Modal Agregar Producto -->
+    
     <section th:fragment="agregarProducto">
         <div id="agregarProducto" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -104,7 +99,7 @@
         </div>
     </section>
 
-    <!-- Fragmento: Listado de Productos -->
+    
     <section th:fragment="listadoProductos" id="productos">
         <div class="container">
             <div class="row mb-4">
@@ -140,7 +135,7 @@
                                             <a th:href="@{/producto/eliminar/}+${productos[j].idProducto}" class="btn btn-danger btn-sm me-1">
                                                 <i class="fas fa-trash"></i> Eliminar
                                             </a>
-                                            <a th:href="@{/producto/modifica/}+${productos[j].idProducto}" class="btn btn-success btn-sm">
+                                            <a th:href="@{/producto/modificar/}+${productos[j].idProducto}" class="btn btn-success btn-sm">
                                                 <i class="fas fa-pencil-alt"></i> Actualizar
                                             </a>
                                             <a th:href="@{/producto/ver/}+${productos[j].idProducto}" class="btn btn-info btn-sm">
@@ -175,106 +170,95 @@
         </div>
     </section>
     
-    <!-- Fragmento para editar Producto -->
 <section th:fragment="editarProducto">
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <form method="POST"
-                  th:action="@{/producto/guardar}" 
-                  th:object="${producto}"
-                  class="was-validated"                          
+                  th:action="@{/producto/guardar}" th:object="${producto}"
+                  class="was-validated"
                   enctype="multipart/form-data">
-                
-                <!-- Campos ocultos -->
+
                 <input type="hidden" th:field="*{idProducto}" />
-                <input type="hidden" th:field="*{rutaImagen}" />
 
-                <!-- Botones u otras secciones (opcional) -->
-                <section th:replace="~{producto/fragmentos :: botonesEditar}" />
+                <div th:replace="~{producto/fragmentos :: botonesEditar}" />
 
-                <div id="details">
+                <div id="detalles">
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>Editar Producto</h4>
+                                <div class="card-header">
+                                    <h4>Actualizar</h4>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" th:field="*{descripcion}" placeholder="Descripción" required />
                                     </div>
-                                    <div class="card-body">
-                                        
-                                        
-                                        <div class="mb-3">
-                                            <label for="descripcion">Descripción</label>
-                                            <input type="text" class="form-control" 
-                                                   th:field="*{descripcion}" required />
-                                        </div>
 
-                                       
-                                        <div class="mb-3">
-                                            <label for="talla">Talla</label>
-                                            <input type="text" class="form-control"
-                                                   th:field="*{talla}" required />
-                                        </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" th:field="*{talla}" placeholder="Talla" required />
+                                    </div>
 
-                                        
-                                        <div class="mb-3">
-                                            <label for="color">Color</label>
-                                            <input type="text" class="form-control"
-                                                   th:field="*{color}" required />
-                                        </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" th:field="*{color}" placeholder="Color" required />
+                                    </div>
 
-                                       
-                                        <div class="mb-3">
-                                            <label for="precio">Precio</label>
-                                            <input type="number" step="0.01" min="0" class="form-control"
-                                                   th:field="*{precio}" required />
-                                        </div>
+                                    <div class="mb-3">
+                                        <input type="number" step="0.01" min="0" class="form-control" th:field="*{precio}" placeholder="Precio" required />
+                                    </div>
 
-                                        
-                                        <div class="mb-3">
-                                            <label for="existencias">Existencias</label>
-                                            <input type="number" min="0" class="form-control"
-                                                   th:field="*{existencias}" required />
-                                        </div>
+                                    <div class="mb-3">
+                                        <input type="number" min="0" class="form-control" th:field="*{existencias}" placeholder="Existencias" required />
+                                    </div>
 
-                                       
-                                        <div class="mb-3 form-check">
-                                            <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo" />
-                                            <label class="form-check-label" for="activo">Activo</label>
-                                        </div>
+                                    <div class="mb-3">
+                                        <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo" />
+                                    </div>
 
-                                        
-                                        <div class="mb-3">
-                                            <label for="categoria">Categoría</label>
-                                            <select class="form-select" th:field="*{categoria}" required>
-                                                <option th:each="cat : ${categorias}"
-                                                        th:value="${cat}"
-                                                        th:text="${cat.descripcion}">
-                                                </option>
-                                            </select>
-                                        </div>
+                                    <div class="mb-3">
+                                        <select th:field="*{categoria.idCategoria}" class="form-select">
+                                            <option th:each="c : ${categorias}"
+                                                    th:value="${c.idCategoria}"
+                                                    th:text="${c.descripcion}">
+                                            </option>
+                                        </select>
+                                    </div>
 
-                                       
-                                        <div class="mb-3">
-                                            <label for="imagenFile">Imagen</label>
-                                            <input class="form-control" type="file" name="imagenFile"
-                                                   onchange="readURL(this);" />
-                                            <img id="blah" th:src="@{${producto.rutaImagen}}" alt="Imagen actual" height="200" />
-                                        </div>
+                                    <div class="mb-3">
+                                        <img th:if="${producto.rutaImagen != null}" th:src="@{${producto.rutaImagen}}" alt="Imagen actual" height="200" class="mb-2" />
+                                        <input class="form-control" type="file" name="imagenFile" />
+                                    </div>
 
-                                    </div> 
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </form>
         </div>
     </div>
 </section>
 
-</body>
-</html>
+<section th:fragment="botonesEditar">
+    <div class="container py-4 mb-4 bg-light">
+        <div class="row">
+            <div class="col-md-4 d-grid">
+                <a th:href="@{/producto/listado}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Regresar
+                </a>
+            </div>
+            <div class="col-md-4 d-grid">
+                <a th:href="@{/producto/eliminar/}+${producto.idProducto}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Eliminar
+                </a>
+            </div>
+            <div class="col-md-4 d-grid">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
