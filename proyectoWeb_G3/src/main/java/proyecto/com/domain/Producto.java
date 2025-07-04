@@ -25,7 +25,8 @@ public class Producto implements Serializable {
     private Long idProducto;
     //private Long idCategoria;  ya no se usa por el @manyToOne
     private String descripcion;
-    private String detalle;
+    private String talla;
+    private String color;
     private double precio;
     private int existencias;
     private String rutaImagen;

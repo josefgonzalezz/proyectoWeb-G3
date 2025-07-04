@@ -9,6 +9,7 @@ package proyecto.com.controller;
  *
  * @author XPC
  */
+import proyecto.com.domain.Categoria;
 import proyecto.com.domain.Producto;
 import proyecto.com.service.CategoriaService;
 import proyecto.com.service.ProductoService;
@@ -44,6 +45,16 @@ public class ProductoController {
         model.addAttribute("categorias", categorias);
 
         model.addAttribute("totalProductos", productos.size());
+        return "/producto/listado";
+    }
+    
+    @GetMapping("/listado/{idCategoria}")
+    public String listado(Model model, Categoria categoria) {
+        var productos = categoriaService.getCategoria(categoria).getProductos();
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("productos", productos);
+        model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("categorias", categorias);
         return "/producto/listado";
     }
 
