@@ -107,4 +107,17 @@ public class ProductoController {
 
         return "/producto/modifica";
     }
+    @GetMapping("/ver/{idProducto}")
+    public String productoVer(Producto producto, Model model) {
+    producto = productoService.getProducto(producto);
+    if (producto == null) {
+        return "redirect:/producto/listado";
+    }
+    model.addAttribute("producto", producto);
+
+    var categorias = categoriaService.getCategorias(false);
+    model.addAttribute("categorias", categorias);
+
+    return "/producto/ver";
+    }
 }

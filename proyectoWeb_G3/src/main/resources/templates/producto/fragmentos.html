@@ -260,5 +260,62 @@
             </div>
         </div>
     </div>
+    
+</section>
+    <section th:fragment="verProducto">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="border rounded p-3" style="background-color: #1d6f42;">
+                    <img th:if="${producto.rutaImagen != null}" th:src="@{${producto.rutaImagen}}" alt="Imagen del producto"
+                         class="img-fluid rounded" style="max-height: 400px; object-fit: contain;" />
+                </div>
+            </div>
+            
+    <div class="col-md-5">
+                <h3 class="fw-bold mb-3" th:text="${producto.descripcion}">Nombre del producto</h3>
+                <h4 class="text-success fw-semibold mb-4" 
+                    th:text="'₡' + ${#numbers.formatDecimal(producto.precio, 0, 2)}">Precio</h4>
+                
+ 
+        <form>
+                    <!-- TALLA -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Talla</label>
+                        <select class="form-select" aria-label="Seleccionar talla">
+                            <option th:text="${producto.talla}" selected></option>
+                            <!-- 
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            -->
+                        </select>
+                    </div>
+
+                    <!-- CANTIDAD -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Cantidad</label>
+                        <select class="form-select" aria-label="Cantidad">
+                            <option selected>1</option>
+                            <option th:each="i : ${#numbers.sequence(1, producto.existencias)}"
+                                    th:value="${i}"
+                                    th:text="${i}">
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success px-5 py-2 fw-bold">Comprar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>
 
+<section th:fragment="botonesVer">
+    <div class="container py-4 mb-4 bg-light">
+        <div class="row">
+            <div class="col-md-4 d-grid"><a th:href="@{/producto/listado}" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Regresar</a></div>
+            <div class="col-md-4 d-grid"><a th:href="@{/producto/editar/}+${producto.idProducto}" class="btn btn-warning"><i class="fas fa-edit"></i> Editar</a></div>
+            <div class="col-md-4 d-grid"><a th:href="@{/producto/ver/}+${producto.idProducto}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a></div>
+        </div>
+    </div>
+</section>
