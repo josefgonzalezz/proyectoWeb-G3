@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ProyectoDesarolloG3Application<com>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "proyecto.com.ProyectoDesarolloG3Application",
+            "projectName": "com",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
