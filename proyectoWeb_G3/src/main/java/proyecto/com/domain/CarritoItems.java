@@ -7,7 +7,7 @@ package proyecto.com.domain;
 
 /**
  *
- * @author XPC
+ * @author Andres
  */
 import jakarta.persistence.*;
 import java.io.Serializable;
