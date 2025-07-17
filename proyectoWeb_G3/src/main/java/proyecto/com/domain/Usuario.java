@@ -11,36 +11,32 @@ package proyecto.com.domain;
  */
 import java.io.Serializable;
 
-import jakarta.persistence.*; 
+import jakarta.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "users")
+@Table(name = "usuario")
+
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private Long idProducto;
-
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column (name = "id_usuario")
+    private Long idUsuario;
     private String username;
-    private String email;
-    private String password_hash;
-    private String first_name;
-    private String last_name;
-    private String phone;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
+    private String password;
+    private String nombre;
+    private String apellidos;
+    private String correo;
+    private String telefono;
+    private String rutaImagen;    
     private boolean activo;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private Usuario usuario;
-
-    public Usuario() {
-    }
+    
+    @OneToMany
+    @JoinColumn(name="id_usuario")
+    List<Rol> roles;
 }
