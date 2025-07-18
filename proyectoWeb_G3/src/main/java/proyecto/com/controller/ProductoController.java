@@ -62,8 +62,15 @@ public class ProductoController {
    @PostMapping("/guardar")
 public String productoGuardar(Producto producto,
         @RequestParam("imagenFile") MultipartFile imagenFile) {
+    if (producto.getIdProducto() != null && imagenFile.isEmpty()) {
+        Producto conservar = productoService.getProducto(producto); 
+        
+        if (conservar != null) {
+            producto.setRutaImagen(conservar.getRutaImagen());
+        }
+    }
     if (!imagenFile.isEmpty()) {
-        productoService.save(producto); // primero guardar para obtener el ID
+        productoService.save(producto);
         producto.setRutaImagen(
             firebaseStorageService.cargarImagen(
                 imagenFile,
@@ -71,8 +78,9 @@ public String productoGuardar(Producto producto,
                 producto.getIdProducto())
         );
     }
-    // Aquí ya contiene la ruta anterior si no se subió nueva imagen
-    productoService.save(producto); // guardar definitivo
+
+    productoService.save(producto);
+
     return "redirect:/producto/listado";
 }
 
