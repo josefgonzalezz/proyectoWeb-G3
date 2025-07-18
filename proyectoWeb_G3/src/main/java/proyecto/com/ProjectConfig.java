@@ -67,51 +67,60 @@ public class ProjectConfig implements WebMvcConfigurer {
         registry.addViewController("/producto/listado").setViewName("producto/listado");
         registry.addViewController("/producto/ver").setViewName("producto/ver");
         registry.addViewController("/producto/modificar").setViewName("/producto/modificar");
-        registry.addViewController("/producto/modificar").setViewName("/producto/modificar");
+        registry.addViewController("/producto/guardar").setViewName("/producto/guardar");
 
         registry.addViewController("/nosotros/listado").setViewName("nosotros/listado");
         
     }
     
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(requests -> requests
-                .requestMatchers(
-                    "/", "/index", "/errores/**", "/carrito/**", "/pruebas/**",
-                    "/reportes/**", "/registro/**", "/js/**", "/webjars/**", 
-                    "/image/**", "/video/**", "/listado/**", "/ver/**", 
-                    "/domain/producto/**"
-                ).permitAll()
+  @Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .authorizeHttpRequests(requests -> requests
+            
+            .requestMatchers(
+                "/", "/index", "/errores/**", "/carrito/**", "/pruebas/**",
+                "/registro/**", "/js/**", "/webjars/**", 
+                "/image/**", "/video/**", "/css/**"
+            ).permitAll()
 
-                .requestMatchers("/producto/eliminar/**").hasAuthority("ROLE_ADMIN")
+          
+            .requestMatchers(
+                "/producto/eliminar/**",
+                "/categoria/eliminar/**",
+                "/usuario/eliminar/**"
+            ).hasRole("ADMIN")
 
-                .requestMatchers(
-                    "/producto/nuevo", "/producto/guardar",
-                    "/producto/modificar/**", "/producto/eliminar/**",
-                    "/categoria/nuevo", "/categoria/guardar",
-                    "/categoria/modificar/**", "/categoria/eliminar/**",
-                    "/usuario/nuevo", "/usuario/guardar",
-                    "/usuario/modificar/**", "/usuario/eliminar/**",
-                    "/reportes/**"
-                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_VENDEDOR")
+           
+            .requestMatchers(
+                "/producto/nuevo", "/producto/guardar",
+                "/producto/modificar/**", 
+                "/categoria/nuevo", "/categoria/guardar",
+                "/categoria/modificar/**",
+                "/usuario/nuevo", "/usuario/guardar",
+                "/usuario/modificar/**",
+                "/reportes/**"
+            ).hasAnyRole("ADMIN", "VENDEDOR")
 
-                .requestMatchers(
-                    "/producto/listado", 
-                    "/producto/ver", 
-                    "/nosotros/listado"
-                ).hasRole("USER")
+           
+            .requestMatchers(
+                "/producto/listado", 
+                "/producto/ver/**", 
+                "/nosotros/listado"
+            ).hasAnyRole("ADMIN", "VENDEDOR", "USER")
 
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .permitAll()
-            )
-            .logout(logout -> logout.permitAll());
+            
+            .anyRequest().authenticated()
+        )
+        .formLogin(form -> form
+            .loginPage("/login")
+            .permitAll()
+        )
+        .logout(logout -> logout.permitAll())
+        .csrf().disable(); 
 
-        return http.build();
-    }
+    return http.build();
+}
 
     @Autowired
     private UserDetailsService userDetailsService;

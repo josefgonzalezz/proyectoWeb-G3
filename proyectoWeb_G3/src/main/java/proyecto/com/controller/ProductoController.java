@@ -59,21 +59,23 @@ public class ProductoController {
         return "/producto/modifica";
     }
 
-    @PostMapping("/guardar")
-    public String productoGuardar(Producto producto,
-            @RequestParam("imagenFile") MultipartFile imagenFile) {
-        if (!imagenFile.isEmpty()) {
-            productoService.save(producto); // primero guardar para obtener el ID
-            producto.setRutaImagen(
-                firebaseStorageService.cargarImagen(
-                    imagenFile,
-                    "producto",
-                    producto.getIdProducto())
-            );
-        }
-        productoService.save(producto); // guardar con imagen
-        return "redirect:/producto/listado";
+   @PostMapping("/guardar")
+public String productoGuardar(Producto producto,
+        @RequestParam("imagenFile") MultipartFile imagenFile) {
+    if (!imagenFile.isEmpty()) {
+        productoService.save(producto); // primero guardar para obtener el ID
+        producto.setRutaImagen(
+            firebaseStorageService.cargarImagen(
+                imagenFile,
+                "producto",
+                producto.getIdProducto())
+        );
     }
+    // Aquí ya contiene la ruta anterior si no se subió nueva imagen
+    productoService.save(producto); // guardar definitivo
+    return "redirect:/producto/listado";
+}
+
 
     @GetMapping("/eliminar/{idProducto}")
     public String productoEliminar(Producto producto) {
