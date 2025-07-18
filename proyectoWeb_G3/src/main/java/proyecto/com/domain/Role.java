@@ -3,13 +3,3 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package proyecto.com.domain;
-
-/**
- *
- * @author XPC
- */
-public enum Role {
-    CUSTOMER,
-    ADMIN    
-}

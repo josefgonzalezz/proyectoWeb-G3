@@ -5,10 +5,6 @@
 
 package proyecto.com.controller;
 
-/**
- *
- * @author XPC
- */
 import proyecto.com.domain.Categoria;
 import proyecto.com.domain.Producto;
 import proyecto.com.service.CategoriaService;
@@ -66,28 +62,16 @@ public class ProductoController {
     @PostMapping("/guardar")
     public String productoGuardar(Producto producto,
             @RequestParam("imagenFile") MultipartFile imagenFile) {
-
         if (!imagenFile.isEmpty()) {
-            // Guardamos primero para obtener el ID (si es nuevo)
-            productoService.save(producto);
+            productoService.save(producto); // primero guardar para obtener el ID
             producto.setRutaImagen(
                 firebaseStorageService.cargarImagen(
                     imagenFile,
                     "producto",
                     producto.getIdProducto())
             );
-        } else {
-            // Si es edición, conservar la imagen actual
-            if (producto.getIdProducto() != null) {
-                Producto productoExistente = productoService.getProducto(producto);
-                if (productoExistente != null && productoExistente.getRutaImagen() != null) {
-                    producto.setRutaImagen(productoExistente.getRutaImagen());
-                }
-            }
         }
-
-        // Guardar el producto con o sin imagen nueva
-        productoService.save(producto);
+        productoService.save(producto); // guardar con imagen
         return "redirect:/producto/listado";
     }
 

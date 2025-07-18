@@ -26,7 +26,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class ProjectConfig implements WebMvcConfigurer {
 
-    /* ========== INTERNACIONALIZACIÓN ========== */
     @Bean
     public LocaleResolver localeResolver() {
         var slr = new SessionLocaleResolver();
@@ -56,7 +55,6 @@ public class ProjectConfig implements WebMvcConfigurer {
         return messageSource;
     }
 
-    /* ========== CONTROLADORES DE VISTAS ========== */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
@@ -64,42 +62,45 @@ public class ProjectConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/registro/nuevo").setViewName("registro/nuevo");
 
-        // Producto
         registry.addViewController("/producto/nuevo").setViewName("producto/nuevo");
-        registry.addViewController("/producto/guardar").setViewName("producto/guardar");
-        registry.addViewController("/producto/modificar").setViewName("producto/modificar");
         registry.addViewController("/producto/eliminar").setViewName("producto/eliminar");
         registry.addViewController("/producto/listado").setViewName("producto/listado");
         registry.addViewController("/producto/ver").setViewName("producto/ver");
+        registry.addViewController("/producto/modificar").setViewName("/producto/modificar");
+        registry.addViewController("/producto/modificar").setViewName("/producto/modificar");
 
-        // Nosotros
         registry.addViewController("/nosotros/listado").setViewName("nosotros/listado");
+        
     }
-
-    /* ========== SEGURIDAD ========== */
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests((requests) -> requests
+            .authorizeHttpRequests(requests -> requests
                 .requestMatchers(
-                    "/", "/index", "/errores/", "/carrito/", "/pruebas/",
-                    "/reportes/", "/registro/", "/js/**", "/webjars/**", "/image/**", "/video/**",
-                    "/listado/", "/ver/**", "/domain/producto**"
+                    "/", "/index", "/errores/**", "/carrito/**", "/pruebas/**",
+                    "/reportes/**", "/registro/**", "/js/**", "/webjars/**", 
+                    "/image/**", "/video/**", "/listado/**", "/ver/**", 
+                    "/domain/producto/**"
                 ).permitAll()
 
-                .requestMatchers(
-                    "/producto/listado", "/producto/ver", "/nosotros/listado",
-                    "/producto/nuevo", "/producto/modificar", "/producto/guardar", "/producto/eliminar"
-                ).hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers("/producto/eliminar/**").hasAuthority("ROLE_ADMIN")
 
                 .requestMatchers(
-                    "/producto/listado", "/producto/ver", "/nosotros/listado",
-                    "/producto/nuevo", "/producto/modificar"
-                ).hasAnyAuthority("ROLE_VENDEDOR")
+                    "/producto/nuevo", "/producto/guardar",
+                    "/producto/modificar/**", "/producto/eliminar/**",
+                    "/categoria/nuevo", "/categoria/guardar",
+                    "/categoria/modificar/**", "/categoria/eliminar/**",
+                    "/usuario/nuevo", "/usuario/guardar",
+                    "/usuario/modificar/**", "/usuario/eliminar/**",
+                    "/reportes/**"
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_VENDEDOR")
 
                 .requestMatchers(
-                    "/producto/listado", "/producto/ver", "/nosotros/listado"
-                ).hasAuthority("ROLE_USER")
+                    "/producto/listado", 
+                    "/producto/ver", 
+                    "/nosotros/listado"
+                ).hasRole("USER")
 
                 .anyRequest().authenticated()
             )
@@ -112,7 +113,6 @@ public class ProjectConfig implements WebMvcConfigurer {
         return http.build();
     }
 
-    /* ========== AUTENTICACIÓN CON BASE DE DATOS ========== */
     @Autowired
     private UserDetailsService userDetailsService;
 
