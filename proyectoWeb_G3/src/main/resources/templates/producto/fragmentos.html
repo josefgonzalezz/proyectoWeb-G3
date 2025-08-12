@@ -277,10 +277,10 @@
     </div>
 </section>
 
+
 <section th:fragment="verProducto">
     <div class="container py-5">
         <div class="row justify-content-center">
-
             <div class="col-md-5 d-flex justify-content-center">
                 <div class="border rounded d-inline-block p-2" style="background-color: #1d6f42;">
                     <img th:if="${producto.rutaImagen != null}"
@@ -295,18 +295,17 @@
                 <h3 class="fw-bold mb-3" th:text="${producto.descripcion}">Nombre del producto</h3>
                 <h4 class="text-success fw-semibold mb-4" th:text="'₡' + ${producto.precio}">Precio</h4>
 
-                <form>
+                <form id="carritoForm">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Talla</label>
-                        <select class="form-select" aria-label="Seleccionar talla">
+                        <select class="form-select" aria-label="Seleccionar talla" disabled>
                             <option th:text="${producto.talla}" selected></option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Cantidad</label>
-                        <select class="form-select" aria-label="Cantidad">
-                            <option selected>1</option>
+                        <select name="cantidad" class="form-select" aria-label="Cantidad">
                             <option th:each="i : ${#numbers.sequence(1, producto.existencias)}"
                                     th:value="${i}"
                                     th:text="${i}">
@@ -314,13 +313,28 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-success px-5 py-2 fw-bold">Comprar</button>
+                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}"/>
+
+                    <button class="btn btn-warning px-5 py-2 fw-bold" 
+                            id="addCar" 
+                            name="addCar" 
+                            onclick="addCard(this.form)" 
+                            type="button">
+                        <i class="fas fa-cart-plus me-2"></i>
+                        Agregar al Carrito
+                    </button>
                 </form>
             </div>
-
         </div>
     </div>
+
+    <div id="resultsBlock" style="display: none;"></div>
 </section>
+
+
+
+
+
 
 <section th:fragment="botonesVer">
     <div class="container py-4 mb-4 bg-light">
