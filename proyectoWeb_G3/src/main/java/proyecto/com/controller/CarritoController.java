@@ -35,87 +35,113 @@ public class CarritoController {
        return "/carrito/listado";
    }
 
-@GetMapping("/carrito/agregar/{idProducto}/{cantidad}")
-public ModelAndView agregarItem(Model model, 
-                               @PathVariable Long idProducto, 
-                               @PathVariable int cantidad) {
-    
-    Producto productoParaBuscar = new Producto();
-    productoParaBuscar.setIdProducto(idProducto);
+   @GetMapping("/carrito/agregar/{idProducto}/{cantidad}")
+   public ModelAndView agregarItem(Model model,@PathVariable Long idProducto, @PathVariable int cantidad) {
+       Producto productoParaBuscar = new Producto();
+       productoParaBuscar.setIdProducto(idProducto);
 
-    Producto producto = productoService.getProducto(productoParaBuscar);
-    
-    if (producto == null) {
-        return new ModelAndView("redirect:/error");
-    }
+       Producto producto = productoService.getProducto(productoParaBuscar);
+       
+       if (producto == null) {
+           return new ModelAndView("redirect:/error");
+       }
 
-    // Usamos el método add para manejar suma y validaciones
-    itemService.add(new Item(producto), cantidad);
+       itemService.add(new Item(producto), cantidad);
 
-    var lista = itemService.gets();
-    int totalCarritos = 0;
-    int carritoTotalVenta = 0;
-    for (Item i : lista) {
-        totalCarritos += i.getCantidad();
-        carritoTotalVenta += (i.getCantidad() * i.getPrecio());
-    }
+       var lista = itemService.gets();
+       int totalCarritos = 0;
+       int carritoTotalVenta = 0;
+       for (Item i : lista) {
+           totalCarritos += i.getCantidad();
+           carritoTotalVenta += (i.getCantidad() * i.getPrecio());
+       }
 
-    model.addAttribute("listaItems", lista);
-    model.addAttribute("listaTotal", totalCarritos);
-    model.addAttribute("carritoTotal", carritoTotalVenta);
+       model.addAttribute("listaItems", lista);
+       model.addAttribute("listaTotal", totalCarritos);
+       model.addAttribute("carritoTotal", carritoTotalVenta);
 
-    return new ModelAndView("/carrito/fragmentos :: verCarrito");
-}
+       return new ModelAndView("/carrito/fragmentos :: verCarrito");
+   }
+   
+  
+   @GetMapping("/carrito/modificar/{idProducto}")
+   public String modificarItem(@PathVariable("idProducto") Long idProducto, Model model) {
+       Producto productoParaBuscar = new Producto();
+       productoParaBuscar.setIdProducto(idProducto);
 
+       Item item = itemService.get(new Item(productoParaBuscar));
+       if (item == null) {
+           return "redirect:/carrito/listado";
+       }
+       model.addAttribute("item", item);
+       return "/carrito/modifica";
+   }
 
+   @GetMapping("/carrito/eliminar/{idProducto}")
+   public String eliminarItem(@PathVariable("idProducto") Long idProducto) {
+       Producto productoParaBuscar = new Producto();
+       productoParaBuscar.setIdProducto(idProducto);
+       
+       Item item = itemService.get(new Item(productoParaBuscar));
+       if (item != null) {
+           itemService.delete(item);
+       }
+       return "redirect:/carrito/listado";
+   }
 
+   @PostMapping("/carrito/guardar")
+   public String guardarItem(@RequestParam("idProducto") Long idProducto,@RequestParam("cantidad") int cantidad) {
+       Producto producto = new Producto();
+       producto.setIdProducto(idProducto);
 
-@GetMapping("/carrito/modificar/{idProducto}")
-public String modificarItem(@PathVariable("idProducto") Long idProducto, Model model) {
-    Producto productoParaBuscar = new Producto();
-    productoParaBuscar.setIdProducto(idProducto);
+       Item item = new Item(producto);
+       item.setCantidad(cantidad);
 
-    Item item = itemService.get(new Item(productoParaBuscar));
-    if (item == null) {
-        // Opcional: redirigir o mostrar mensaje si no existe
-        return "redirect:/carrito/listado";
-    }
-
-    model.addAttribute("item", item);
-    return "/carrito/modifica";
-}
-
-
-
-  @GetMapping("/carrito/eliminar/{idProducto}")
-public String eliminarItem(@PathVariable("idProducto") Long idProducto) {
-    Producto productoParaBuscar = new Producto();
-    productoParaBuscar.setIdProducto(idProducto);
-    
-    Item item = itemService.get(new Item(productoParaBuscar));
-    if (item != null) {
-        itemService.delete(item);
-    }
-    return "redirect:/carrito/listado";
-}
-
-@PostMapping("/carrito/guardar")
-public String guardarItem(@RequestParam("idProducto") Long idProducto, 
-                         @RequestParam("cantidad") int cantidad) {
-    Producto producto = new Producto();
-    producto.setIdProducto(idProducto);
-
-    Item item = new Item(producto);
-    item.setCantidad(cantidad);
-
-    itemService.update(item);
-    return "redirect:/carrito/listado";
-}
-
+       itemService.update(item);
+       return "redirect:/carrito/listado";
+   }
 
    @GetMapping("/facturar/carrito")
    public String facturarCarrito() {
        itemService.facturar();
        return "redirect:/";
+   }
+
+
+
+@GetMapping("/carrito/aumentar/{idProducto}")
+public String aumentarCantidad(@PathVariable("idProducto") Long idProducto) {
+    Producto productoParaBuscar = new Producto();
+    productoParaBuscar.setIdProducto(idProducto);
+
+    Item item = itemService.get(new Item(productoParaBuscar));
+    if (item != null) {
+        int maxExistencias = item.getExistencias(); 
+        int nuevaCantidad = item.getCantidad() + 1;
+        if (nuevaCantidad <= maxExistencias) {
+            item.setCantidad(nuevaCantidad);
+            itemService.update(item);
+        }
+      
+    }
+    return "redirect:/carrito/listado";
+}
+
+   @GetMapping("/carrito/disminuir/{idProducto}")
+   public String disminuirCantidad(@PathVariable("idProducto") Long idProducto) {
+       Producto productoParaBuscar = new Producto();
+       productoParaBuscar.setIdProducto(idProducto);
+
+       Item item = itemService.get(new Item(productoParaBuscar));
+       if (item != null) {
+           int nuevaCantidad = item.getCantidad() - 1;
+           if (nuevaCantidad < 1) {
+               itemService.delete(item);
+           } else {
+               item.setCantidad(nuevaCantidad);
+               itemService.update(item);
+           }
+       }
+       return "redirect:/carrito/listado";
    }
 }

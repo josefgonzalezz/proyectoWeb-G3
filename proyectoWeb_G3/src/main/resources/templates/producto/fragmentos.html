@@ -117,8 +117,6 @@
                                 <div class="col-md-4 mb-4"
                                      th:each="j : ${#numbers.sequence(i, i + 2)}"
                                      th:if="${j} < ${productos.size()}">
-
-                                    
                                     <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_VENDEDOR')">
                                         <div class="card h-100">
                                             <img th:src="@{${productos[j].rutaImagen}}" class="card-img-top"
@@ -152,8 +150,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    
                                     <div sec:authorize="!hasRole('ROLE_ADMIN') and !hasRole('ROLE_VENDEDOR')" 
                                          th:if="${productos[j].existencias > 0}">
                                         <div class="card h-100">

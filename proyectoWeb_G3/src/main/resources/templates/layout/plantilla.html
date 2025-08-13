@@ -18,63 +18,66 @@
 <body th:fragment="body" class="d-flex flex-column" style="min-height: 100vh;">
 
     
-    <header th:fragment="header">
-        <nav class="navbar navbar-dark bg-success">
-            <div class="container-fluid d-flex align-items-center">
+  <header th:fragment="header">
+    <nav class="navbar navbar-dark bg-success">
+        <div class="container-fluid d-flex align-items-center">
 
-                
-                <a class="navbar-brand d-flex align-items-center ms-3" th:href="@{/}"><img th:src="@{/image/vaca.jpg}" alt="Vaca" width="40" height="40" class="me-2" />La Vaca</a>
+            <a class="navbar-brand d-flex align-items-center ms-3" th:href="@{/}">
+                <img th:src="@{/image/vaca.jpg}" alt="Vaca" width="40" height="40" class="me-2" />La Vaca
+            </a>
 
-              
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
-                    aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="d-flex align-items-center ms-auto">
-                    <a th:href="@{/carrito}" class="text-white me-3" title="Carrito">
-                        <i class="fas fa-shopping-cart fa-lg"></i>
-                    </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                    <div id="resultsBlock"></div>
-                    <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
-                        <li class="nav-item">
-                            <a class="nav-link" th:href="@{/login}">
-                                <i class="fas fa-sign-in-alt"></i>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav" sec:authorize="isAuthenticated()">
-                        <li class="nav-item text-white my-auto">
-                            <i class="fas fa-user"></i> <span sec:authentication="name">Bob</span>
-                        </li>
-                        <li class="nav-item my-auto">
-                            <form method="post" th:action="@{/logout}">
-                                <button class="btn btn-dark">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+            <div class="d-flex align-items-center ms-auto">
+
+                <div id="resultsBlock"></div>
+
+                <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/login}">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav d-flex align-items-center" sec:authorize="isAuthenticated()">
+                    <li class="nav-item text-white me-2">
+                        <i class="fas fa-user"></i> <span sec:authentication="name">Bob</span>
+                    </li>
+                    <li class="nav-item">
+                        <form method="post" th:action="@{/logout}">
+                            <button class="btn btn-dark">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+
             </div>
-            <div class="collapse bg-dark" id="navbarMenu">
-                <div class="p-3">
-                    <ul class="navbar-nav">
-                        <li class="nav-item px-2">
-                            <a class="nav-menu-link nav-link" th:href="@{/producto/listado}">Productos</a>
-                        </li>
-                        <li class="nav-item px-2">
-                            <a class="nav-menu-link nav-link" th:href="@{/nosotros/listado}">Sobre Nosotros</a>
-                        </li>
-                        <li class="nav-item px-2" sec:authorize="hasRole('ROLE_ADMIN')">
-                            <a class="nav-menu-link nav-link" th:href="@{/usuario/listado}">Usuarios</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        </div>
 
-        </nav>
-    </header>
+        <div class="collapse bg-dark" id="navbarMenu">
+            <div class="p-3">
+                <ul class="navbar-nav">
+                    <li class="nav-item px-2">
+                        <a class="nav-menu-link nav-link" th:href="@{/producto/listado}">Productos</a>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-menu-link nav-link" th:href="@{/nosotros/listado}">Sobre Nosotros</a>
+                    </li>
+                    <li class="nav-item px-2" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-menu-link nav-link" th:href="@{/usuario/listado}">Usuarios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </nav>
+</header>
+
 
     
     <main th:fragment="main" class="flex-grow-1 w-100 text-center" style="background-color: white; padding: 0; margin: 0;">
