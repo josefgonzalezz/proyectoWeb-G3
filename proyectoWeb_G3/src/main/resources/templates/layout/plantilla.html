@@ -5,231 +5,218 @@
 
 <head th:fragment="head">
     <title>La Vaca</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
-    
-    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
-    
-    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
-   
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet" />
     <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
     <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-
-  
     <script th:src="@{/js/rutinas.js}"></script>
 </head>
 
 <body th:fragment="body" class="d-flex flex-column" style="min-height: 100vh;">
 
-<header th:fragment="header">
-    <nav class="navbar navbar-dark bg-success">
-        <div class="container-fluid d-flex align-items-center">
-            <a class="navbar-brand d-flex align-items-center ms-3" th:href="@{/}">
-                <img th:src="@{/image/vaca.jpg}" alt="Vaca" width="40" height="40" class="me-2" />
-                La Vaca
-            </a>
+    
+    <header th:fragment="header">
+        <nav class="navbar navbar-dark bg-success">
+            <div class="container-fluid d-flex align-items-center">
 
-            <button class="navbar-toggler" type="button" 
-                    data-bs-toggle="collapse" 
-                    data-bs-target="#navbarMenu" 
-                    aria-controls="navbarMenu" 
-                    aria-expanded="false" 
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <form class="d-flex mx-auto" th:action="@{/buscar}" method="GET" role="search" style="max-width: 600px; width: 100%;">
-                <input class="form-control me-2 flex-grow-1" 
-                       type="search" 
-                       placeholder="Buscar..." 
-                       aria-label="Buscar" 
-                       name="q" />
-                <button class="btn btn-outline-light" type="submit">Buscar</button>
-            </form>
-
-            <div class="d-flex align-items-center ms-auto">
-
-                <a th:href="@{/carrito}" class="text-white me-3" title="Carrito">
-                    <i class="fas fa-shopping-cart fa-lg"></i>
-                </a>
+                
+                <a class="navbar-brand d-flex align-items-center ms-3" th:href="@{/}"><img th:src="@{/image/vaca.jpg}" alt="Vaca" width="40" height="40" class="me-2" />La Vaca</a>
 
               
-                 <div id="resultsBlock"></div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                    aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="d-flex align-items-center ms-auto">
+                    <a th:href="@{/carrito}" class="text-white me-3" title="Carrito">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                    </a>
 
-                    
+                    <div id="resultsBlock"></div>
                     <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
                         <li class="nav-item">
-                            <a class="nav-link" th:href="@{/login}"><i class="fas fa-sign-in-alt"></i></a>
+                            <a class="nav-link" th:href="@{/login}">
+                                <i class="fas fa-sign-in-alt"></i>
+                            </a>
                         </li>
                     </ul>
-
-                   
                     <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                         <li class="nav-item text-white my-auto">
                             <i class="fas fa-user"></i> <span sec:authentication="name">Bob</span>
                         </li>
                         <li class="nav-item my-auto">
                             <form method="post" th:action="@{/logout}">
-                                <button class="btn btn-dark"><i class="fas fa-sign-out-alt"></i></button>
+                                <button class="btn btn-dark">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </button>
                             </form>
                         </li>
                     </ul>
-
+                </div>
             </div>
+            <div class="collapse bg-dark" id="navbarMenu">
+                <div class="p-3">
+                    <ul class="navbar-nav">
+                        <li class="nav-item px-2">
+                            <a class="nav-menu-link nav-link" th:href="@{/producto/listado}">Productos</a>
+                        </li>
+                        <li class="nav-item px-2">
+                            <a class="nav-menu-link nav-link" th:href="@{/nosotros/listado}">Sobre Nosotros</a>
+                        </li>
+                        <li class="nav-item px-2" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a class="nav-menu-link nav-link" th:href="@{/usuario/listado}">Usuarios</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </nav>
+    </header>
+
+    
+    <main th:fragment="main" class="flex-grow-1 w-100 text-center" style="background-color: white; padding: 0; margin: 0;">
+
+        
+        <div id="carouselExampleIndicators" class="carousel slide mb-0" data-bs-ride="false" style="width: 100%;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Video 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+                    aria-label="Video 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+                    aria-label="Video 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
+                        <source th:src="@{/video/video1.mp4}" type="video/mp4" />
+                    </video>
+                </div>
+                <div class="carousel-item">
+                    <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
+                        <source th:src="@{/video/video2.mp4}" type="video/mp4" />
+                    </video>
+                </div>
+                <div class="carousel-item">
+                    <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
+                        <source th:src="@{/video/video3.mp4}" type="video/mp4" />
+                    </video>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
         </div>
 
-        <div class="collapse bg-dark" id="navbarMenu">
-            <div class="p-3">
-                <ul class="navbar-nav">
-                    <li class="nav-item px-2">
-                        <a class="nav-menu-link nav-link" th:href="@{/producto/listado}">Productos</a>
-                    </li>
-                    <li class="nav-item px-2">
-                        <a class="nav-menu-link nav-link" th:href="@{/nosotros/listado}">Sobre Nosotros</a>
-                    </li>
-                </ul>
+        
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
+                    <img class="card-img-top" src="/image/vaca.jpg" alt="Hombres"
+                        style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/producto/listado" class="stretched-link text-decoration-none text-dark">Hombres</a>
+                        </h5>
+                        <p class="card-text">Explora nuestra colección para hombres con las últimas tendencias.</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Actualizado hace 3 minutos</small>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
-</header>
 
-<main th:fragment="main" class="flex-grow-1 w-100 text-center" style="background-color: white; padding: 0; margin: 0;">
-    <div id="carouselExampleIndicators" class="carousel slide mb-0" data-bs-ride="false" style="width: 100%;">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Video 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Video 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Video 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
-                    <source th:src="@{/video/video1.mp4}" type="video/mp4"/>
-                </video>
+            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
+                    <img class="card-img-top" src="/image/vaca.jpg" alt="Novedades"
+                        style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/producto/listado" class="stretched-link text-decoration-none text-dark">Novedades</a>
+                        </h5>
+                        <p class="card-text">Descubre las últimas novedades que tenemos para ti.</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Actualizado hace 3 minutos</small>
+                    </div>
+                </div>
             </div>
-            <div class="carousel-item">
-                <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
-                    <source th:src="@{/video/video2.mp4}" type="video/mp4"/>
-                </video>
-            </div>
-            <div class="carousel-item">
-                <video class="d-block w-100" style="height: 80vh; object-fit: cover;" autoplay muted loop>
-                    <source th:src="@{/video/video3.mp4}" type="video/mp4"/>
-                </video>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
-    </div>
 
-    <div class="row mt-4">
-        <div class="col-md-4 mb-4 d-flex justify-content-center">
-            <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
-                <img class="card-img-top" src="/image/vaca.jpg" alt="Hombres"
-                     style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="/producto/listado" class="stretched-link text-decoration-none text-dark">Hombres</a>
+            <div class="col-md-4 mb-4 d-flex justify-content-center">
+                <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
+                    <img class="card-img-top" src="/image/vaca.jpg" alt="Mujeres"
+                        style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/producto/listado" class="stretched-link text-decoration-none text-dark">Mujeres</a>
+                        </h5>
+                        <p class="card-text">Encuentra lo mejor para mujeres con estilos exclusivos.</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Actualizado hace 3 minutos</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <section th:fragment="carritoResultados" class="py-2 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div id="resultsBlockContent" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+    <footer th:fragment="footer" class="bg-success text-white">
+        <div class="container py-4">
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <h5 class="text-white">
+                        <i class="fas fa-cow me-2"></i>La Vaca
                     </h5>
-                    <p class="card-text">Explora nuestra colección para hombres con las últimas tendencias.</p>
+                    <p class="text-light fst-italic">Tu tienda de confianza.</p>
                 </div>
-                <div class="card-footer">
-                    <small class="text-muted">Actualizado hace 3 minutos</small>
+
+                <div class="col-md-4 mb-3 text-center">
+                    <h6>Contáctanos</h6>
+                    <p><i class="fas fa-envelope text-light me-2"></i> info@lavaca.com</p>
+                    <p><i class="fas fa-phone text-light me-2"></i> +506 84025066</p>
                 </div>
+
+                <div class="col-md-4 mb-3 text-center">
+                    <h6>Síguenos</h6>
+                    <div class="d-flex justify-content-center">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-light" />
+
+            <div class="text-center">
+                <small class="text-light">© 2025 La Vaca. Todos los derechos reservados.</small>
             </div>
         </div>
-
-        <div class="col-md-4 mb-4 d-flex justify-content-center">
-            <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
-                <img class="card-img-top" src="/image/vaca.jpg" alt="Novedades"
-                     style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="/producto/listado" class="stretched-link text-decoration-none text-dark">Novedades</a>
-                    </h5>
-                    <p class="card-text">Descubre las últimas novedades que tenemos para ti.</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Actualizado hace 3 minutos</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4 d-flex justify-content-center">
-            <div class="card bg-white h-100 shadow" style="max-width: 280px; width: 100%; padding: 10px;">
-                <img class="card-img-top" src="/image/vaca.jpg" alt="Mujeres"
-                     style="max-height: 180px; object-fit: contain; margin: auto; padding-top: 10px;" />
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="/producto/listado" class="stretched-link text-decoration-none text-dark">Mujeres</a>
-                    </h5>
-                    <p class="card-text">Encuentra lo mejor para mujeres con estilos exclusivos.</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Actualizado hace 3 minutos</small>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
-<section th:fragment="carritoResultados" class="py-2 bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div id="resultsBlockContent" class="text-center">
-                    <!-- Aquí puede ir contenido adicional si quieres -->
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<footer th:fragment="footer" class="bg-success text-white">
-    <div class="container py-4">
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <h5 class="text-white">
-                    <i class="fas fa-cow me-2"></i>La Vaca
-                </h5>
-                <p class="text-light fst-italic">
-                    Tu tienda de confianza.
-                </p>
-            </div>
-
-            <div class="col-md-4 mb-3 text-center">
-                <h6>Contáctanos</h6>
-                <p><i class="fas fa-envelope text-light me-2"></i> info@lavaca.com</p>
-                <p><i class="fas fa-phone text-light me-2"></i> +506 84025066</p>
-            </div>
-
-            <div class="col-md-4 mb-3 text-center">
-                <h6>Síguenos</h6>
-                <div class="d-flex justify-content-center">
-                    <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-light"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <hr class="border-light"/>
-
-        <div class="text-center">
-            <small class="text-light">
-                © 2025 La Vaca. Todos los derechos reservados.
-            </small>
-        </div>
-    </div>
-</footer>
+    </footer>
 
 </body>
 </html>
