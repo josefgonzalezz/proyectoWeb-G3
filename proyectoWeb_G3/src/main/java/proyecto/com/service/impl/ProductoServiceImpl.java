@@ -50,6 +50,11 @@ public class ProductoServiceImpl implements ProductoService {
     public void delete(Producto producto) {
         productoDao.delete(producto);
     }
+    @Override
+public List<Producto> buscarPorNombre(String nombre) {
+    return productoDao.findByDescripcionContainingIgnoreCase(nombre);
+}
+
     
 }
  

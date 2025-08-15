@@ -100,6 +100,23 @@
     </div>
 </section>
 
+<section th:fragment="buscadorProductos" class="py-3">
+    <div class="container">
+        <form class="d-flex mx-auto" th:action="@{/producto/listado}" method="get" role="search">
+            <input class="form-control me-2 flex-grow-1" 
+                   type="search" 
+                   placeholder="Buscar producto por nombre..." 
+                   aria-label="Buscar" 
+                   name="nombre" 
+                   th:value="${nombre}" />
+            <button class="btn btn-outline-success" type="submit">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </form>
+    </div>
+</section>
+
+
 <section th:fragment="listadoProductos" id="productos">
     <div class="container">
         <div class="row mb-4">
