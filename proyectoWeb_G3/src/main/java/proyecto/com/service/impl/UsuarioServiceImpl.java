@@ -14,11 +14,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
+
     @Autowired
     private UsuarioDao usuarioDao;
+
     @Autowired
     private RolDao rolDao;
 
@@ -61,8 +64,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional
     public void save(Usuario usuario, boolean crearRolUser) {
-        usuario=usuarioDao.save(usuario);
-        if (crearRolUser) {  //Si se está creando el usuario, se crea el rol por defecto "USER"
+       
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        usuario.setPassword(encoder.encode(usuario.getPassword()));
+        usuario.setActivo(true);
+        usuario = usuarioDao.save(usuario);
+        if (crearRolUser) {
             Rol rol = new Rol();
             rol.setNombre("ROLE_USER");
             rol.setIdUsuario(usuario.getIdUsuario());
