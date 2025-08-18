@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package proyecto.com.controller;
+
 
 import proyecto.com.domain.Usuario;
 import proyecto.com.service.UsuarioService;
 import proyecto.com.service.FirebaseStorageService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,9 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
-
+    
     @Autowired
     private UsuarioService usuarioService;
+    
+    @Autowired
+    private FirebaseStorageService firebaseStorageService;
 
     @GetMapping("/listado")
     public String listado(Model model) {
@@ -32,26 +32,32 @@ public class UsuarioController {
         return "/usuario/listado";
     }
 
-    @GetMapping("/nuevo")
-    public String usuarioNuevo(Usuario usuario) {
-        return "/usuario/modifica";
+    @GetMapping("/agregar") 
+    public String usuarioAgregar(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "/usuario/agregar";
     }
 
-    @Autowired
-    private FirebaseStorageService firebaseStorageService;
+   
+    @GetMapping("/nuevo")
+    public String usuarioNuevo(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "/usuario/agregar"; 
+    }
 
     @PostMapping("/guardar")
     public String usuarioGuardar(Usuario usuario,
             @RequestParam("imagenFile") MultipartFile imagenFile) {
         if (!imagenFile.isEmpty()) {
-            usuarioService.save(usuario,false);
+            usuarioService.save(usuario, false);
             usuario.setRutaImagen(
                     firebaseStorageService.cargarImagen(
                             imagenFile,
                             "usuario",
                             usuario.getIdUsuario()));
         }
-        usuarioService.save(usuario,true);
+        usuarioService.save(usuario, true);
+        
         return "redirect:/usuario/listado";
     }
 

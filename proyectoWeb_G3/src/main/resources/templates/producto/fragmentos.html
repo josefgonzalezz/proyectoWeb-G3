@@ -100,6 +100,23 @@
     </div>
 </section>
 
+<section th:fragment="buscadorProductos" class="py-3">
+    <div class="container">
+        <form class="d-flex mx-auto" th:action="@{/producto/listado}" method="get" role="search">
+            <input class="form-control me-2 flex-grow-1" 
+                   type="search" 
+                   placeholder="Buscar producto por nombre..." 
+                   aria-label="Buscar" 
+                   name="nombre" 
+                   th:value="${nombre}" />
+            <button class="btn btn-outline-success" type="submit">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </form>
+    </div>
+</section>
+
+
 <section th:fragment="listadoProductos" id="productos">
     <div class="container">
         <div class="row mb-4">
@@ -117,46 +134,63 @@
                                 <div class="col-md-4 mb-4"
                                      th:each="j : ${#numbers.sequence(i, i + 2)}"
                                      th:if="${j} < ${productos.size()}">
-
-                                    <div class="card h-100">
-                                        <img th:src="@{${productos[j].rutaImagen}}" class="card-img-top"
-                                             alt="Imagen del producto"
-                                             style="height: 200px; object-fit: cover;">
-                                        <div class="card-body">
-                                            <h5 class="card-title" th:text="${productos[j].descripcion}">Descripción</h5>
-                                            <p class="card-text">
-                                                <strong>Talla:</strong> [[${productos[j].talla}]]<br>
-                                                <strong>Color:</strong> [[${productos[j].color}]]<br>
-                                                <strong>Precio:</strong>
-                                                $[[${#numbers.formatDecimal(productos[j].precio, 1, 'COMMA', 2, 'POINT')}]]<br>
-                                                <strong>Existencias:</strong> [[${productos[j].existencias}]]<br>
-                                                <strong>Estado:</strong>
-                                                <span th:text="${productos[j].activo} ? 'Activo' : 'Inactivo'"></span>
-                                            </p>
-                                        </div>
-                                        <div class="card-footer text-center">
-
-                                            
-                                            <div sec:authorize="hasRole('ROLE_ADMIN')">
-                                                <a th:href="@{/producto/eliminar/}+${productos[j].idProducto}" class="btn btn-danger btn-sm me-1">
+                                    <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_VENDEDOR')">
+                                        <div class="card h-100">
+                                            <img th:src="@{${productos[j].rutaImagen}}" class="card-img-top"
+                                                 alt="Imagen del producto"
+                                                 style="height: 200px; object-fit: cover;">
+                                            <div class="card-body">
+                                                <h5 class="card-title" th:text="${productos[j].descripcion}">Descripción</h5>
+                                                <p class="card-text">
+                                                    <strong>Talla:</strong> [[${productos[j].talla}]]<br>
+                                                    <strong>Color:</strong> [[${productos[j].color}]]<br>
+                                                    <strong>Precio:</strong>
+                                                    $[[${#numbers.formatDecimal(productos[j].precio, 1, 'COMMA', 2, 'POINT')}]]<br>
+                                                    <strong>Existencias:</strong> [[${productos[j].existencias}]]<br>
+                                                    <strong>Estado:</strong>
+                                                    <span th:text="${productos[j].activo} ? 'Activo' : 'Inactivo'"></span>
+                                                </p>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <a th:href="@{/producto/eliminar/}+${productos[j].idProducto}" 
+                                                   class="btn btn-danger btn-sm me-1">
                                                     <i class="fas fa-trash"></i> Eliminar
                                                 </a>
-                                            </div>
-
-                                         
-                                            <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_VENDEDOR')">
-                                                <a th:href="@{/producto/modificar/}+${productos[j].idProducto}" class="btn btn-success btn-sm">
+                                                <a th:href="@{/producto/modificar/}+${productos[j].idProducto}" 
+                                                   class="btn btn-success btn-sm">
                                                     <i class="fas fa-pencil-alt"></i> Actualizar
                                                 </a>
-                                            </div>
-
-                                        
-                                            <div sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_VENDEDOR', 'ROLE_USER')">
-                                                <a th:href="@{/producto/ver/}+${productos[j].idProducto}" class="btn btn-info btn-sm">
+                                                <a th:href="@{/producto/ver/}+${productos[j].idProducto}" 
+                                                   class="btn btn-info btn-sm">
                                                     <i class="fas fa-eye"></i> Ver
                                                 </a>
                                             </div>
-
+                                        </div>
+                                    </div>
+                                    <div sec:authorize="!hasRole('ROLE_ADMIN') and !hasRole('ROLE_VENDEDOR')" 
+                                         th:if="${productos[j].existencias > 0}">
+                                        <div class="card h-100">
+                                            <img th:src="@{${productos[j].rutaImagen}}" class="card-img-top"
+                                                 alt="Imagen del producto"
+                                                 style="height: 200px; object-fit: cover;">
+                                            <div class="card-body">
+                                                <h5 class="card-title" th:text="${productos[j].descripcion}">Descripción</h5>
+                                                <p class="card-text">
+                                                    <strong>Talla:</strong> [[${productos[j].talla}]]<br>
+                                                    <strong>Color:</strong> [[${productos[j].color}]]<br>
+                                                    <strong>Precio:</strong>
+                                                    $[[${#numbers.formatDecimal(productos[j].precio, 1, 'COMMA', 2, 'POINT')}]]<br>
+                                                    <strong>Existencias:</strong> [[${productos[j].existencias}]]<br>
+                                                    <strong>Estado:</strong>
+                                                    <span th:text="${productos[j].activo} ? 'Activo' : 'Inactivo'"></span>
+                                                </p>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                <a th:href="@{/producto/ver/}+${productos[j].idProducto}" 
+                                                   class="btn btn-info btn-sm">
+                                                    <i class="fas fa-eye"></i> Ver
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -184,14 +218,12 @@
         <div class="text-center p-4" th:if="${productos == null or productos.empty}">
             <span>No hay productos disponibles</span>
         </div>
-        <div class="row mt-4">
-            <div class="col-md-3 offset-md-9">
-                <div class="card text-center bg-success text-white">
-                </div>
-            </div>
-        </div>
     </div>
 </section>
+
+
+
+
 
 <!-- Esto sera una opcion solo para administrador -->
 <section th:fragment="editarProducto">
@@ -277,10 +309,10 @@
     </div>
 </section>
 
+
 <section th:fragment="verProducto">
     <div class="container py-5">
         <div class="row justify-content-center">
-
             <div class="col-md-5 d-flex justify-content-center">
                 <div class="border rounded d-inline-block p-2" style="background-color: #1d6f42;">
                     <img th:if="${producto.rutaImagen != null}"
@@ -295,18 +327,17 @@
                 <h3 class="fw-bold mb-3" th:text="${producto.descripcion}">Nombre del producto</h3>
                 <h4 class="text-success fw-semibold mb-4" th:text="'₡' + ${producto.precio}">Precio</h4>
 
-                <form>
+                <form id="carritoForm">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Talla</label>
-                        <select class="form-select" aria-label="Seleccionar talla">
+                        <select class="form-select" aria-label="Seleccionar talla" disabled>
                             <option th:text="${producto.talla}" selected></option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Cantidad</label>
-                        <select class="form-select" aria-label="Cantidad">
-                            <option selected>1</option>
+                        <select name="cantidad" class="form-select" aria-label="Cantidad">
                             <option th:each="i : ${#numbers.sequence(1, producto.existencias)}"
                                     th:value="${i}"
                                     th:text="${i}">
@@ -314,13 +345,28 @@
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-success px-5 py-2 fw-bold">Comprar</button>
+                    <input type="hidden" name="idProducto" th:value="${producto.idProducto}"/>
+
+                    <button class="btn btn-success px-5 py-2 fw-bold" 
+                            id="addCar" 
+                            name="addCar" 
+                            onclick="addCard(this.form)" 
+                            type="button">
+                        Agregar al Carrito
+                    </button>
+
                 </form>
             </div>
-
         </div>
     </div>
+
+    <div id="resultsBlock" style="display: none;"></div>
 </section>
+
+
+
+
+
 
 <section th:fragment="botonesVer">
     <div class="container py-4 mb-4 bg-light">

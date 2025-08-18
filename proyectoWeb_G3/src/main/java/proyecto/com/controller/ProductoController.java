@@ -33,14 +33,20 @@ public class ProductoController {
     private FireBaseStorageServiceImpl firebaseStorageService;
 
     @GetMapping("/listado")
-    private String listado(Model model) {
-        var productos = productoService.getProductos(false);
-        model.addAttribute("productos", productos);
+    private String listado(
+            @RequestParam(required = false) String nombre,
+            Model model) {
 
         var categorias = categoriaService.getCategorias(false);
         model.addAttribute("categorias", categorias);
 
+        var productos = (nombre != null && !nombre.trim().isEmpty())
+                ? productoService.buscarPorNombre(nombre)
+                : productoService.getProductos(false);
+
+        model.addAttribute("productos", productos);
         model.addAttribute("totalProductos", productos.size());
+        model.addAttribute("nombre", nombre); 
         return "/producto/listado";
     }
 
@@ -59,31 +65,27 @@ public class ProductoController {
         return "/producto/modifica";
     }
 
-   @PostMapping("/guardar")
-public String productoGuardar(Producto producto,
-        @RequestParam("imagenFile") MultipartFile imagenFile) {
-    if (producto.getIdProducto() != null && imagenFile.isEmpty()) {
-        Producto conservar = productoService.getProducto(producto); 
-        
-        if (conservar != null) {
-            producto.setRutaImagen(conservar.getRutaImagen());
+    @PostMapping("/guardar")
+    public String productoGuardar(Producto producto,
+                                  @RequestParam("imagenFile") MultipartFile imagenFile) {
+        if (producto.getIdProducto() != null && imagenFile.isEmpty()) {
+            Producto conservar = productoService.getProducto(producto);
+            if (conservar != null) {
+                producto.setRutaImagen(conservar.getRutaImagen());
+            }
         }
-    }
-    if (!imagenFile.isEmpty()) {
+        if (!imagenFile.isEmpty()) {
+            productoService.save(producto);
+            producto.setRutaImagen(
+                    firebaseStorageService.cargarImagen(
+                            imagenFile,
+                            "producto",
+                            producto.getIdProducto())
+            );
+        }
         productoService.save(producto);
-        producto.setRutaImagen(
-            firebaseStorageService.cargarImagen(
-                imagenFile,
-                "producto",
-                producto.getIdProducto())
-        );
+        return "redirect:/producto/listado";
     }
-
-    productoService.save(producto);
-
-    return "redirect:/producto/listado";
-}
-
 
     @GetMapping("/eliminar/{idProducto}")
     public String productoEliminar(Producto producto) {
@@ -101,17 +103,18 @@ public String productoGuardar(Producto producto,
 
         return "/producto/modifica";
     }
+
     @GetMapping("/ver/{idProducto}")
     public String productoVer(Producto producto, Model model) {
-    producto = productoService.getProducto(producto);
-    if (producto == null) {
-        return "redirect:/producto/listado";
-    }
-    model.addAttribute("producto", producto);
+        producto = productoService.getProducto(producto);
+        if (producto == null) {
+            return "redirect:/producto/listado";
+        }
+        model.addAttribute("producto", producto);
 
-    var categorias = categoriaService.getCategorias(false);
-    model.addAttribute("categorias", categorias);
+        var categorias = categoriaService.getCategorias(false);
+        model.addAttribute("categorias", categorias);
 
-    return "/producto/ver";
+        return "/producto/ver";
     }
 }
