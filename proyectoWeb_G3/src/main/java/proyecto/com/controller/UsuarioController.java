@@ -1,8 +1,10 @@
 package proyecto.com.controller;
 
+
 import proyecto.com.domain.Usuario;
 import proyecto.com.service.UsuarioService;
 import proyecto.com.service.FirebaseStorageService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,10 +32,17 @@ public class UsuarioController {
         return "/usuario/listado";
     }
 
+    @GetMapping("/agregar") 
+    public String usuarioAgregar(Model model) {
+        model.addAttribute("usuario", new Usuario());
+        return "/usuario/agregar";
+    }
+
+   
     @GetMapping("/nuevo")
     public String usuarioNuevo(Model model) {
         model.addAttribute("usuario", new Usuario());
-        return "/usuario/agregar";
+        return "/usuario/agregar"; 
     }
 
     @PostMapping("/guardar")
@@ -48,6 +57,7 @@ public class UsuarioController {
                             usuario.getIdUsuario()));
         }
         usuarioService.save(usuario, true);
+        
         return "redirect:/usuario/listado";
     }
 
